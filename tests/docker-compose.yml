@@ -1,0 +1,16 @@
+version: "2"
+services:
+  aws-load-testing:
+    build:
+      context: ../core/docker
+      dockerfile: Dockerfile
+      args:
+        ARCH: aarch64
+    volumes:
+      - type: tmpfs
+        target: /tmp
+      - ./aws_credentials:/home/k6/.aws/credentials
+    environment:
+      AWS_REGION: eu-north-1
+      APPLICATION: app1
+      ENVIRONMENT: dev

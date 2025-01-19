@@ -1,0 +1,39 @@
+### General ###
+.DS_Store
+*.log
+
+### Project-Specific ###
+*redeploy.*
+infra.env
+infra.tfvars
+build*/
+.env
+venv/
+*/builds/
+*.plan
+index.html
+.terraform.lock.hcl
+
+### Python ###
+__pycache__/
+*.py[cod]
+instance/
+.webassets-cache
+
+### Terraform ###
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraformrc
+terraform.rc
+crash.log
+crash.*.log
+
+### Temporary Files ###
+*.tmp
+*.bak
+*.swp
+*.swo
+*~

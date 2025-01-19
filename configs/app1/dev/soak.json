@@ -1,0 +1,15 @@
+{
+  "options": {
+    "stages": [
+      { "duration": "10m", "target": 50 },
+      { "duration": "2h", "target": 50 },
+      { "duration": "10m", "target": 0 }
+    ],
+    "thresholds": {
+      "http_req_duration": ["p(95)<800"]
+    }
+  },
+  "checks": {
+    "Status is 200": "r => r.status === 200"
+  }
+}

@@ -1,0 +1,57 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: detect-private-key
+      - id: check-added-large-files
+
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+        types: [python]
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          - --ignore=E231
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.10.0
+    hooks:
+      - id: hadolint
+        args:
+          - --ignore=DL3018
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.77.0
+    hooks:
+      - id: terraform_docs
+        args:
+          - --hook-config=--path-to-file=README.md
+          - --hook-config=--add-to-existing-file=true
+          - --hook-config=--create-file-if-not-exist=true
+          - --hook-config=--use-standard-markers=true
+      - id: terraform_tflint
+      - id: terraform_fmt
+      - id: terraform_validate
+        exclude: 'core/terraform/modules/k6_reports_web/[^/]+$' # To avoid errors with configuration_aliases https://github.com/hashicorp/terraform/issues/28490
+        args:
+          - --tf-init-args=-upgrade
+          - --tf-init-args=-backend-config="bucket=${TF_STATE_S3_BUCKET}"
+          - --tf-init-args=-backend-config="key=${TF_STATE_S3_KEY}"
+
+  - repo: https://github.com/bridgecrewio/checkov
+    rev: 2.3.275
+    hooks:
+      - id: checkov
+        args: [
+          "--skip-download",
+          "--skip-check", "CKV_AWS_337,CKV_AWS_136,CKV_AWS_51"
+        ]
