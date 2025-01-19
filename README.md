@@ -71,6 +71,8 @@ make tf.apply
 
 Once the infrastructure is created create `core/docker/.env` with the values from the terrafoorm output (see `core/docker/env.example` for reference).
 
+You also need to update SSM parameters (`/load-testing/basic-auth-user` and `/load-testing/basic-auth-password`) with your user and password. These are used by the Lambda@Edge to provide basic-auth to your reports.
+
 ### Build and Push Docker Images
 Build and push the Docker container:
 
