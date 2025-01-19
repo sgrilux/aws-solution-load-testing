@@ -12,6 +12,7 @@ venv/
 */builds/
 *.plan
 index.html
+.terraform.lock.hcl
 
 ### Python ###
 __pycache__/
