@@ -16,7 +16,6 @@ An SNS notification (5) will inform the user the end of the test with the URL wh
 
 ### Prerequisites
 
-## Prerequisites
 - **AWS Account**: Set up and configure the AWS CLI.
 - **Docker**: To build and push containers.
 - **Hadolint**: A Docker file linter (https://github.com/hadolint/hadolint)
