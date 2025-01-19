@@ -1,0 +1,17 @@
+k6_image                 = "aws-load-testing"
+
+# Name of the bucket where all reports will be stored
+reports_bucket_name  = ""
+
+# Name of the bucket where K6 scripts will be stored
+artifacts_bucket_name = ""
+
+# Route 53 zone name
+route53_zone_name         = ""
+
+# Domain name
+domain_name               = "s"
+subject_alternative_names = []
+
+# Email for SNS notification
+sns_email = ""

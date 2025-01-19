@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K6 Reports</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #folder-tree {
+            width: 60%;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        #folder-tree ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        #folder-tree li {
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        #folder-tree li.folder {
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        #folder-tree li.folder:hover {
+            background-color: #e8f5e9;
+        }
+
+        #folder-tree li.file {
+            color: #333;
+            margin-left: 20px;
+        }
+
+        #folder-tree li.file:hover {
+            background-color: #f0f0f0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div id="folder-tree">
+        <ul id="folder-structure">
+            <!-- Dynamic folder structure goes here -->
+        </ul>
+    </div>
+
+    <script>
+        const bucketUrl = 'https://{{ env.REPORTS_URL }}';
+        const folderName = 'reports';
+        const fileListUrl = `${bucketUrl}/${folderName}/file-list.json`;
+
+        // Fetch the file list JSON
+        fetch(fileListUrl)
+            .then(response => response.json())
+            .then(data => {
+                const files = data.files.filter(file => file !== `${folderName}/file-list.json`); // Exclude file-list.json
+                const folderStructure = buildFolderTree(files);
+                renderFolderTree(folderStructure, document.getElementById('folder-structure'));
+            })
+            .catch(error => {
+                console.error('Error fetching file list:', error);
+            });
+
+        function buildFolderTree(files) {
+            const root = {};
+            files.forEach(filePath => {
+                const parts = filePath.split('/');
+                let current = root;
+                parts.forEach((part, index) => {
+                    if (!current[part]) {
+                        current[part] = index === parts.length - 1 ? null : {};
+                    }
+                    current = current[part];
+                });
+            });
+            return root;
+        }
+
+        function renderFolderTree(tree, container, currentPath = "") {
+            Object.keys(tree).forEach(key => {
+                const li = document.createElement('li');
+                const fullPath = currentPath ? `${currentPath}/${key}` : key;
+
+                if (tree[key] === null) {
+                    li.innerHTML = `<a href="${bucketUrl}/${fullPath}" target="_blank">${key}</a>`;
+                    li.classList.add('file');
+                } else {
+                    li.textContent = key;
+                    li.classList.add('folder');
+                    const sublist = document.createElement('ul');
+                    renderFolderTree(tree[key], sublist, fullPath);
+                    li.appendChild(sublist);
+                }
+                container.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
